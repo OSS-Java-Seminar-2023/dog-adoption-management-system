@@ -49,7 +49,7 @@ Prospective adopters can create accounts, search for dogs, submit adoption appli
 - Data Validation: Implement input validation and error handling to maintain data integrity and security.
 
 ## Database
-![Database](https://github.com/OSS-Java-Seminar-2023/dog-adoption-management-system/assets/146820239/2a2fe444-ed93-4799-9681-aeb9f90e850e)
+![Database](https://github.com/OSS-Java-Seminar-2023/dog-adoption-management-system/assets/146820239/5e1325f4-cd50-42c0-8e7f-14cef55334ff)
 
 ## Developers
 Dea Bočina & Josip Grljušić
