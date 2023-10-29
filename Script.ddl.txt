@@ -1,0 +1,83 @@
+-- Create Users table
+CREATE TABLE Users (
+    ID UNIQUEIDENTIFIER NOT NULL,
+    OIB BIGINT NOT NULL,
+    Role VARCHAR(50) NOT NULL,
+    Username VARCHAR(50) NOT NULL,
+    Email NCHAR(20) NOT NULL,
+    Password NCHAR(20) NOT NULL,
+    Phone_Number VARCHAR(50) NOT NULL,
+    Name VARCHAR(50) NOT NULL,
+    Surname VARCHAR(50) NOT NULL,
+    Gender VARCHAR(50) NOT NULL,
+    Date_Of_Birth DATE NOT NULL,
+    City VARCHAR(50) NOT NULL,
+    Address VARCHAR(50) NOT NULL,
+    PRIMARY KEY (ID)
+);
+
+-- Create Dogs table
+CREATE TABLE Dogs (
+    ID UNIQUEIDENTIFIER NOT NULL,
+    Microchip BIGINT NOT NULL,
+    Name VARCHAR(50) NOT NULL,
+    Gender VARCHAR(50) NOT NULL,
+    Date_Of_Birth DATE NOT NULL,
+    Breed VARCHAR(50) NOT NULL,
+    Size INT NOT NULL,
+    Sterilised VARCHAR(50) NOT NULL,
+    Castrated VARCHAR(50) NOT NULL,
+    Note VARCHAR(50) NOT NULL,
+    Adoption_Status VARCHAR(50) NOT NULL,
+    Image VARCHAR(120) NOT NULL,
+    PRIMARY KEY (ID)
+);
+
+-- Create Vaccines table
+CREATE TABLE Vaccines (
+    Vaccine_Name VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Vaccine_Name)
+);
+
+-- Create Dog_Vaccine table
+CREATE TABLE Dog_Vaccine (
+    Dog_ID UNIQUEIDENTIFIER NOT NULL,
+    Vaccine_Name VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Vaccine_Name, Dog_ID),
+    FOREIGN KEY (Dog_ID) REFERENCES Dogs(ID),
+    FOREIGN KEY (Vaccine_Name) REFERENCES Vaccines(Vaccine_Name)
+);
+
+-- Create Volunteers table
+CREATE TABLE Volunteers (
+    User_ID UNIQUEIDENTIFIER NOT NULL,
+    Dog_ID UNIQUEIDENTIFIER NOT NULL,
+    Job VARCHAR(50) NOT NULL,
+    Start_Time DATETIME NOT NULL,
+    Stop_Time DATETIME NOT NULL,
+    PRIMARY KEY (User_ID, Dog_ID, Job),
+    FOREIGN KEY (User_ID) REFERENCES Users(ID),
+    FOREIGN KEY (Dog_ID) REFERENCES Dogs(ID)
+);
+
+-- Create Waiting_List table
+CREATE TABLE Waiting_List (
+    User_ID UNIQUEIDENTIFIER NOT NULL,
+    Dog_ID UNIQUEIDENTIFIER NOT NULL,
+    Date_Of_Application DATE NOT NULL,
+    PRIMARY KEY (User_ID, Dog_ID),
+    FOREIGN KEY (User_ID) REFERENCES Users(ID),
+    FOREIGN KEY (Dog_ID) REFERENCES Dogs(ID)
+);
+
+-- Create Contract table
+CREATE TABLE Contract (
+    ID UNIQUEIDENTIFIER NOT NULL,
+    User_ID UNIQUEIDENTIFIER NOT NULL,
+    Dog_ID UNIQUEIDENTIFIER NULL,
+    Date_Of_Contract DATE NOT NULL,
+    Status VARCHAR(50) NOT NULL,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (User_ID) REFERENCES Users(ID),
+    FOREIGN KEY (Dog_ID) REFERENCES Dogs(ID)
+);
