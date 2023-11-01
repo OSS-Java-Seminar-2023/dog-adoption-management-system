@@ -1,7 +1,9 @@
-CREATE TYPE adoption_status_enum AS ENUM ('Adopted', 'Not adopted');
-CREATE TYPE role_enum AS ENUM ('User', 'Admin', 'Employee');
-CREATE TYPE jobs_enum AS ENUM ('Walking', 'Cleaning', 'Temporary adoption', 'Feeding');
-CREATE TYPE status_enum AS ENUM ('First interview', 'Completed', 'Confirmed', 'Denied');
+CREATE TYPE role_enum AS ENUM ('User', 'Staff', 'Admin');
+CREATE TYPE gender_enum AS ENUM ('Male', 'Female');
+CREATE TYPE jobs_enum AS ENUM ('Walking & Exercise', 'Cleaning & Maintenance', 'Temporary Adoption', 'Feeding');
+CREATE TYPE adoption_status_enum AS ENUM ('Adopted', 'Not Adopted');
+CREATE TYPE status_enum AS ENUM ('Open', 'In Progress', 'Pending', 'Confirmed', 'Denied');
+CREATE TYPE no_yes_enum AS ENUM ('No', 'Yes');
 
 CREATE TABLE Users (
     ID UNIQUEIDENTIFIER NOT NULL,
@@ -13,7 +15,7 @@ CREATE TABLE Users (
     Phone_Number VARCHAR(15) NOT NULL,
     Name VARCHAR(20) NOT NULL,
     Surname VARCHAR(20) NOT NULL,
-    Gender VARCHAR(10) NOT NULL,
+    Gender gender_enum,
     Date_Of_Birth DATE NOT NULL,
     City VARCHAR(20) NOT NULL,
     Address VARCHAR(30) NOT NULL,
@@ -24,12 +26,12 @@ CREATE TABLE Dogs (
     ID UNIQUEIDENTIFIER NOT NULL,
     Microchip BIGINT NOT NULL,
     Name VARCHAR(20) NOT NULL,
-    Gender VARCHAR(10) NOT NULL,
+    Gender gender_enum,
     Date_Of_Birth DATE NOT NULL,
     Breed VARCHAR(20) NOT NULL,
     Size INT NOT NULL,
-    Sterilised VARCHAR(4) NOT NULL,
-    Castrated VARCHAR(4) NOT NULL,
+    Sterilised no_yes_enum,
+    Castrated no_yes_enum,
     Note VARCHAR(50),
     Adoption_Status adoption_status_enum,
     Image VARCHAR(120) NOT NULL,
