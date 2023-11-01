@@ -1,7 +1,12 @@
+CREATE TYPE adoption_status_enum AS ENUM ('Adopted', 'Not adopted');
+CREATE TYPE role_enum AS ENUM ('User', 'Admin', 'Employee');
+CREATE TYPE jobs_enum AS ENUM ('Walking', 'Cleaning', 'Temporary adoption', 'Feeding');
+CREATE TYPE status_enum AS ENUM ('First interview', 'Completed', 'Confirmed', 'Denied');
+
 CREATE TABLE Users (
     ID UNIQUEIDENTIFIER NOT NULL,
     OIB BIGINT NOT NULL,
-    Role VARCHAR(15) NOT NULL,
+    Role role_enum,
     Username VARCHAR(20) NOT NULL,
     Email NCHAR(40) NOT NULL,
     Password NCHAR(20) NOT NULL,
@@ -26,7 +31,7 @@ CREATE TABLE Dogs (
     Sterilised VARCHAR(4) NOT NULL,
     Castrated VARCHAR(4) NOT NULL,
     Note VARCHAR(50),
-    Adoption_Status VARCHAR(20) NOT NULL,
+    Adoption_Status adoption_status_enum,
     Image VARCHAR(120) NOT NULL,
     PRIMARY KEY (ID)
 );
@@ -48,7 +53,7 @@ CREATE TABLE Volunteers (
     ID UNIQUEIDENTIFIER NOT NULL,
     User_ID UNIQUEIDENTIFIER NOT NULL,
     Dog_ID UNIQUEIDENTIFIER NOT NULL,
-    Job VARCHAR(20) NOT NULL,
+    Job jobs_enum,
     Start_Time DATETIME NOT NULL,
     Stop_Time DATETIME NOT NULL,
     PRIMARY KEY (ID),
@@ -70,7 +75,7 @@ CREATE TABLE Contract (
     User_ID UNIQUEIDENTIFIER NOT NULL,
     Dog_ID UNIQUEIDENTIFIER NULL,
     Date_Of_Contract DATE NOT NULL,
-    Status VARCHAR(30) NOT NULL,
+    Status status_enum,
     PRIMARY KEY (ID),
     FOREIGN KEY (User_ID) REFERENCES Users(ID),
     FOREIGN KEY (Dog_ID) REFERENCES Dogs(ID)
