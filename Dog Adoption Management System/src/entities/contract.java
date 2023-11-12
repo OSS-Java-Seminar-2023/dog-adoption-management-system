@@ -27,5 +27,5 @@ public class contract {
     @Column(name = "status", nullable = false)
     private String status;
 
-    // Getters and setters, other fields or methods as needed
+
 }
