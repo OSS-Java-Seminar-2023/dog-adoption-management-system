@@ -2,7 +2,7 @@ package entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Vaccines")
+@Table(name = "vaccines")
 public class vaccines {
 
     @Id
