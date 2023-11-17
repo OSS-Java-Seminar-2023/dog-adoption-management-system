@@ -1,12 +1,11 @@
 package entities;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Waiting_List")
-public class waiting_list {
+@Table(name = "waiting_list")
+public class Waiting_List {
 
     @Id
     @GeneratedValue
