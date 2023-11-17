@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "dog_vaccine")
-public class dog_vaccine {
+public class Dog_Vaccine {
 
     @EmbeddedId
     private DogVaccineId dogVaccineId;
