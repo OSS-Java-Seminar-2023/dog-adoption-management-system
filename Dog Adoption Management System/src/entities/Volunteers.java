@@ -14,11 +14,11 @@ public class Volunteers {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private users user;
+    private Users user;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", referencedColumnName = "id")
-    private dogs dog;
+    private Dogs dog;
 
     @Column(name = "job", nullable = false)
     private String job;
