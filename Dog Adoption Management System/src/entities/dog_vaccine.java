@@ -3,7 +3,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Dog_Vaccine")
+@Table(name = "dog_vaccine")
 public class dog_vaccine {
 
     @EmbeddedId
