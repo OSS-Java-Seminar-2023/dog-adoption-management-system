@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Dogs")
+@Table(name = "dogs")
 public class dogs {
 
     @Id
