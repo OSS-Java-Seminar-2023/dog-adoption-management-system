@@ -5,7 +5,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "contract")
-public class contract {
+public class Contract {
 
     @Id
     @GeneratedValue
