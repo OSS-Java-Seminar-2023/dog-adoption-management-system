@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Volunteers")
-public class volunteers {
+@Table(name = "volunteers")
+public class Volunteers {
 
     @Id
     @GeneratedValue
