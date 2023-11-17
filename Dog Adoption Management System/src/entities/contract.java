@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Contract")
+@Table(name = "contract")
 public class contract {
 
     @Id
@@ -26,6 +26,5 @@ public class contract {
 
     @Column(name = "status", nullable = false)
     private String status;
-
 
 }
