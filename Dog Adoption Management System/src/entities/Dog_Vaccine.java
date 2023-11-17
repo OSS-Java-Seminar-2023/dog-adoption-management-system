@@ -14,11 +14,11 @@ public class Dog_Vaccine {
 
         @ManyToOne
         @JoinColumn(name = "dog_id", referencedColumnName = "id")
-        private dogs dog;
+        private Dogs dog;
 
         @ManyToOne
         @JoinColumn(name = "vaccine_name", referencedColumnName = "vaccine_name")
-        private vaccines vaccine;
+        private Vaccines vaccine;
 
     }
 }
