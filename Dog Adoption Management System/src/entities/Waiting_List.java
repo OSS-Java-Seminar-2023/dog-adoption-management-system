@@ -14,11 +14,11 @@ public class Waiting_List {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private users user;
+    private Users user;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", referencedColumnName = "id")
-    private dogs dog;
+    private Dogs dog;
 
     @Column(name = "date_of_application", nullable = false)
     @Temporal(TemporalType.DATE)
