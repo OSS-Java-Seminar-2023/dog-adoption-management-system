@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Adoption Contract</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+</head>
+<body>
+<h1>Adoption Contract</h1>
+
+<form th:action="@{/user_page/user_dogs/submitAdoption}" method="POST">
+
+    <!-- Applicant Information -->
+    <h2>Applicant Information</h2>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="fullName" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required><br><br>
+
+    <!-- Pet Information -->
+    <h2>Pet Information</h2>
+    <label for="petName">Pet's Name:</label>
+    <input type="text" id="petName" name="petName" required><br><br>
+
+    <label for="petType">Pet Type:</label>
+    <select id="petType" name="petType">
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+        <option value="other">Other</option>
+    </select><br><br>
+
+    <label for="reason">Reason for Adoption:</label>
+    <textarea id="reason" name="reason" required></textarea><br><br>
+
+    <!-- Agreement -->
+    <h2>Agreement</h2>
+    <label for="agreement">
+        <input type="checkbox" id="agreement" name="agreement" required>
+        I agree to the terms and conditions of pet adoption.
+    </label><br><br>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

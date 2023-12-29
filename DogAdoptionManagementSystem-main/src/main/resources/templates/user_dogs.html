@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Dogs for Adoption</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .dog-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .dog-card {
+            width: 300px;
+            margin: 10px;
+        }
+
+        .dog-card img {
+            margin-bottom: 20px;
+        }
+
+        .dog-card button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+        }
+
+        .dog-card button:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+    background-color: #18191A;
+    color: grey;
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_page/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_page/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_page/user_adoption_progress_tracking}">Progress Tracking</a></li>
+            <li><a th:href="@{/user_page/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Available Dogs for Adoption</h1>
+
+<div class="dog-list">
+    <div th:each="dog : ${dogs}">
+        <div class="dog-card">
+            <h2 th:text="${dog.name}"></h2>
+            <img th:src="@{'/img/' + ${dog.image}}" alt="Dog Image" style="max-width: 100%">
+            <p th:text="'Microchip Number: ' + ${dog.microchip}"></p>
+            <p th:text="'Breed: ' + ${dog.breed}"></p>
+            <p th:text="'Size: ' + ${dog.size}"></p>
+            <p th:text="'Gender: ' + ${dog.gender}"></p>
+            <p th:text="'Date of Birth: ' + ${#dates.format(dog.dateOfBirth, 'dd/MM/yyyy')}"></p>
+            <p th:text="'Sterilised: ' + ${dog.sterilised}"></p>
+            <p th:text="'Castrated: ' + ${dog.castrated}"></p>
+            <p th:text="'Note: ' + ${dog.note}"></p>
+            <p th:text="'Adoption Status: ' + ${dog.adoptionStatus}"></p>
+
+            <button>Adopt Now!</button>
+        </div>
+    </div>
+</div><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<footer>
+    <p>&copy; 2023 Your Dog Adoption Application</p>
+</footer>
+
+</body>
+</html>
