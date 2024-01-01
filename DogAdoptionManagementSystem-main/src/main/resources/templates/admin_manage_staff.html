@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Staff Management</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        h2 {
+            margin-left: 60px;
+        }
+
+        .button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 120px;
+        }
+
+        .button:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_page/admin_manage_staff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_page/admin_manage_user}">User Management</a></li>
+            <li><a th:href="@{/admin_page/admin_manage_dog}">Dog Management</a></li>
+            <li><a th:href="@{/admin_page/admin_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Staff Management</h1><br>
+
+<h2>Add Staff</h2>
+<p>Create a new staff member account</p><br>
+<a class="button" href="/admin_page/admin_manage_staff/admin_add_staff">Add Staff</a><br>
+
+<h2>Update Staff Details</h2>
+<p>Modify existing staff information</p><br>
+<a class="button" href="/admin_page/admin_manage_staff/admin_update_staff">Add Staff</a><br>
+
+<h2>Delete Staff</h2>
+<p>Remove a staff member from the system</p><br>
+<a class="button" href="/admin_page/admin_manage_staff/admin_delete_staff">Add Staff</a>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>
