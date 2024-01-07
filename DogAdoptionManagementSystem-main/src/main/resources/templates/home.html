@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <style>
+        .home-options a {
+            margin-right: 10px;
+            color: #987554;
+            text-decoration: none;
+        }
+
+        .home-options a.register,
+        .home-options a.login {
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            text-decoration: none;
+        }
+
+        .home-options a.register:hover,
+        .home-options a.login:hover {
+            background-color: #967d65;
+        }
+    </style>
+</head>
+<body>
+<div class="home-container">
+    <div class="content-box">
+        <h1>Welcome to our Dog Adoption Application</h1>
+        <p>Find your new furry friend today and adopt, because who's a good human? You are!</p>
+        <div class="home-options">
+            <a href="/register" class="register">Register</a>
+            <a href="/login" class="login">Login</a>
+        </div>
+    </div>
+</div>
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+</body>
+</html>
