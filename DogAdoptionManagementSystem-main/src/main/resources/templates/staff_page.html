@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .options strong {
+            color: #987554;
+        }
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Hello <span th:text="${staff.name}"></span>!</h1>
+
+<p>Welcome to your staff dashboard! Here, you can efficiently manage various aspects of our dog adoption system.</p><br>
+
+<div class="options">
+    <p><strong>My Profile:</strong> View and manage your profile details.</p>
+    <p><strong>Volunteer Management:</strong> Organize and coordinate volunteer activities supporting our cause.</p>
+    <p><strong>Dog Management:</strong> Manage and oversee information related to dogs available for adoption.</p>
+    <p><strong>Contract Management:</strong> Review and handle adoption contract details and processing.</p>
+    <p><strong>Vaccine Management:</strong> Track, update and manage vaccine records for the dogs in our care.</p>
+    <p><strong>Logout:</strong> Click here to log out of your account.</p>
+</div><br><br>
+
+<p>
+    Thank you for choosing to be a part of this initiative. Your involvement and support drive us forward.<br>
+    Feel free to explore and enjoy your time with our dog adoption community!
+</p>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

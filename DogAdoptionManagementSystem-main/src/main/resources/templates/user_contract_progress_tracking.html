@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Adoption Progress Tracking</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .progress-table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 50%;
+            margin-left: 60px;
+            text-align:center;
+        }
+
+        .progress-table td  {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .progress-table th {
+            padding: 8px;
+        }
+
+        .progress-table tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .progress-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .progress-table tr:hover {
+            background-color: #ddd;
+        }
+
+        .progress-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #987554;
+            color: white;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Contract Progress Tracking</h1>
+
+<p>
+    This page allows you to track the progress of your adoption application. Below is a list of submitted applications<br>
+    along with their current statuses.
+</p><br>
+
+<table class="progress-table">
+    <thead>
+    <tr>
+        <th>Application ID</th>
+        <th>Applicant Name</th>
+        <th>Dog Name</th>
+        <th>Date Of Contract</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contract : ${contracts}">
+        <td th:text="${contract.id}"></td>
+        <td th:text="${contract.user.name + ' ' + contract.user.surname}"></td>
+        <td th:text="${contract.dog.name}"></td>
+        <td th:text="${#dates.format(contract.dateOfContract, 'yyyy-MM-dd')}"></td>
+        <td>
+            <span th:text="${contract.status}"
+                  th:style="${contract.status == 'Submitted' ? 'color: grey; font-weight: bold;' :
+                             contract.status == 'In Progress' ? 'color: #D9B611; font-weight: bold;' :
+                             contract.status == 'Approved' ? 'color: green; font-weight: bold;' :
+                             contract.status == 'Declined' ? 'color: red; font-weight: bold;' : ''}">
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

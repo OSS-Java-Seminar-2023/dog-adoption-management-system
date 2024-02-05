@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Update Dog</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        form {
+            margin-left: 60px;
+        }
+
+        select, input[type="submit"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select:focus, input[type="submit"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="date"], input[type="text"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+        function showConfirmation() {
+            const name = document.getElementById('name').value;
+            const microchip = document.getElementById('microchip').value;
+
+            const namePattern = /^[A-Za-z]{1,20}$/;
+            if (!namePattern.test(name)) {
+                alert("Name should contain only characters and should be 1-20 characters long.");
+                return false;
+            }
+
+            const microchipPattern = /^\d{15}$/;
+            if (!microchipPattern.test(microchip)) {
+                alert("Microchip should contain 15 digits.");
+                return false;
+            }
+
+            alert("Registration successful!");
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Update Dog - <span th:text="${dog.name}"></span></h1>
+
+<p>
+    This form allows updating information about a specific dog. It includes details such as the<br>
+    dog's image, name, gender, birthdate, breed, size, sterilization and a 15-digit microchip ID.
+</p><br>
+
+<form th:action="${'/submit-dog-update'}" method="POST" th:object="${dog}" onsubmit="return showConfirmation()">
+
+    Current Image: <span th:text="${dog.image}"></span><br><br>
+    <label for="dogImage">Image:</label>
+    <input type="file" id="dogImage" name="dogImage" accept="image/*"><br><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Name" th:value="${dog.name}" pattern="[A-Za-z]{1,20}"><br>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male" th:selected="${dog.gender=='Male'}" >Male</option>
+        <option value="Female" th:selected="${dog.gender=='Female'}" >Female</option>
+    </select>
+
+    <label for="dateOfBirth">Date Of Birth:</label>
+    <input type="date" id="dateOfBirth" name="dateOfBirth" th:value="${#dates.format(dog.dateOfBirth, 'yyyy-MM-dd')}"><br>
+
+    <label for="breed">Breed:</label>
+    <select id="breed" name="breed" th:value="${dog.breed}">
+        <option value="">Select Breed</option>
+        <option value="Labrador Retriever" th:selected="${dog.breed == 'Labrador Retriever'}">Labrador Retriever</option>
+        <option value="German Shepherd" th:selected="${dog.breed == 'German Shepherd'}">German Shepherd</option>
+        <option value="Golden Retriever" th:selected="${dog.breed == 'Golden Retriever'}">Golden Retriever</option>
+        <option value="Bulldog" th:selected="${dog.breed == 'Bulldog'}">Bulldog</option>
+        <option value="Beagle" th:selected="${dog.breed == 'Beagle'}">Beagle</option>
+        <option value="Poodle" th:selected="${dog.breed == 'Poodle'}">Poodle</option>
+        <option value="French Bulldog" th:selected="${dog.breed == 'French Bulldog'}">French Bulldog</option>
+        <option value="Rottweiler" th:selected="${dog.breed == 'Rottweiler'}">Rottweiler</option>
+        <option value="Yorkshire Terrier" th:selected="${dog.breed == 'Yorkshire Terrier'}">Yorkshire Terrier</option>
+        <option value="Boxer" th:selected="${dog.breed == 'Boxer'}">Boxer</option>
+        <option value="Dalmatian" th:selected="${dog.breed == 'Dalmatian'}">Dalmatian</option>
+        <option value="Dachshund" th:selected="${dog.breed == 'Dachshund'}">Dachshund</option>
+        <option value="Siberian Husky" th:selected="${dog.breed == 'Siberian Husky'}">Siberian Husky</option>
+        <option value="Doberman" th:selected="${dog.breed == 'Doberman'}">Doberman</option>
+        <option value="Great Dane" th:selected="${dog.breed == 'Great Dane'}">Great Dane</option>
+        <option value="Cocker Spaniel" th:selected="${dog.breed == 'Cocker Spaniel'}">Cocker Spaniel</option>
+        <option value="Shih Tzu" th:selected="${dog.breed == 'Shih Tzu'}">Shih Tzu</option>
+        <option value="Pomeranian" th:selected="${dog.breed == 'Pomeranian'}">Pomeranian</option>
+        <option value="Miniature Schnauzer" th:selected="${dog.breed == 'Miniature Schnauzer'}">Miniature Schnauzer</option>
+        <option value="Chihuahua" th:selected="${dog.breed == 'Chihuahua'}">Chihuahua</option>
+        <option value="Border Collie" th:selected="${dog.breed == 'Border Collie'}">Border Collie</option>
+    </select>
+
+    <label for="size">Size:</label>
+    <select id="size" name="size">
+        <option value="" disabled selected>Select Size</option>
+        <option value="Small" th:selected="${dog.size == 'Small'}">Small</option>
+        <option value="Medium" th:selected="${dog.size == 'Medium'}">Medium</option>
+        <option value="Large" th:selected="${dog.size == 'Large'}">Large</option>
+    </select><br>
+
+    <label for="sterilised">Sterilised:</label>
+    <select id="sterilised" name="sterilised">
+        <option value="" disabled selected>Select Sterilised</option>
+        <option value="Yes" th:selected="${dog.sterilised=='Yes'}" >Yes</option>
+        <option value="No" th:selected="${dog.sterilised=='No'}" >No</option>
+    </select>
+
+    <label for="castrated">Castrated:</label>
+    <select id="castrated" name="castrated">
+        <option value="" disabled selected>Select Castrated</option>
+        <option value="Yes" th:selected="${dog.castrated=='Yes'}" >Yes</option>
+        <option value="No" th:selected="${dog.castrated=='No'}" >No</option>
+    </select><br>
+
+    <label for="microchip">Microchip:</label>
+    <input type="text" id="microchip" name="microchip" th:value="${dog.microchip}" pattern="[0-9]{15}" title="Must be 15 digits"><br><br><br>
+
+    <input type="submit" value="Update">
+</form>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .options strong {
+            color: #987554;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Admin Options & Tasks</h1>
+
+<p>
+    As an admin, you hold pivotal roles and responsibilities within our dog adoption system. Below,<br>
+    you'll be able to find various tasks and options at your disposal.
+</p><br>
+
+<div class="options">
+    <p><strong>Admin Management:</strong> Handles administrative tasks.</p>
+    <p><strong>Staff Management:</strong> Manages staff accounts.</p>
+    <p><strong>User Management:</strong> Handles user accounts.</p>
+    <p><strong>Volunteer Management:</strong> Manages volunteer activities.</p>
+    <p><strong>Dog Management:</strong> Administers dog-related information.</p>
+    <p><strong>Contract Management:</strong> Oversees contractual agreements.</p>
+    <p><strong>Vaccine Management:</strong> Manages vaccine records.</p>
+    <p><strong>Logout:</strong> Click here to log out of your account.</p>
+</div>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Management</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        .info-table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            margin-left: 60px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .info-table td  {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .info-table th {
+            padding: 8px;
+        }
+
+        .info-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #987554;
+            color: white;
+        }
+
+        .info-table tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .info-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .info-table tr:hover {
+            background-color: #ddd;
+        }
+
+        h2 {
+            margin-left: 60px;
+        }
+
+        .button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 120px;
+        }
+
+        .button:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1 th:text="${type=='manageStaff' ? 'Staff management' : type=='manageUser' ? 'User management' : 'Admin management'}"></h1><br>
+
+<a class="button" th:href="${type == 'manageStaff' ? '/admin_add?type=addStaff' : type=='manageUser' ? '/admin_add?type=addUser'  : '/admin_add?type=addAdmin'}">
+    <span th:text="${type=='manageStaff' ? 'Add Staff' : type=='manageUser' ? 'Add User' : 'Add Admin'}"></span>
+</a><br><br><br>
+
+<table class="info-table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Gender</th>
+        <th>Date of Birth</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>City</th>
+        <th>Address</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.surname}"></td>
+        <td th:text="${user.gender}"></td>
+        <td th:text="${#dates.format(user.dateOfBirth, 'dd/MM/yyyy')}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.phoneNumber}"></td>
+        <td th:text="${user.city}"></td>
+        <td th:text="${user.address}"></td>
+        <td>
+            <th:block th:if="${type == 'manageStaff'}">
+                <p><a class="button" th:href="@{/admin_update(user_id=${user.id})}">Update</a></p>
+            </th:block>
+            <th:block th:if="${type == 'manageUser'}">
+                <p><a class="button" th:href="@{/admin_update(user_id=${user.id})}">Update</a></p>
+            </th:block>
+            <th:block th:if="${type == 'manageAdmin'}">
+                <p><a class="button" th:href="@{/admin_update(user_id=${user.id})}">Update</a></p>
+            </th:block>
+        </td>
+        <td>
+            <th:block th:if="${type == 'manageStaff'}">
+                <p><a class="button" th:href="@{/admin_delete(user_id=${user.id})}">Delete</a></p>
+            </th:block>
+            <th:block th:if="${type == 'manageUser'}">
+                <p><a class="button" th:href="@{/admin_delete(user_id=${user.id})}">Delete</a></p>
+            </th:block>
+            <th:block th:if="${type == 'manageAdmin'}">
+                <p><a class="button" th:href="@{/admin_delete(user_id=${user.id})}">Delete</a></p>
+            </th:block>
+        </td>
+    </tr>
+    </tbody>
+
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Volunteer for Dogs</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            padding-left: 100px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-left: 170px;
+        }
+
+        table td {
+            padding: 8px;
+        }
+
+        table label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        table input[type="datetime-local"],
+        table select {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        table input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        table input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        .volunteer-form {
+            font-size: 15px;
+        }
+
+        .volunteer-form input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .volunteer-form input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+        function toggleDogSelection() {
+            const jobSelect = document.getElementById('job');
+            const dogSelect = document.getElementById('dog');
+
+            if (jobSelect.value === 'Fostering') {
+                dogSelect.removeAttribute('disabled');
+            } else {
+                dogSelect.value = ''; // Reset dog selection when job changes
+                dogSelect.setAttribute('disabled', 'disabled');
+            }
+        }
+
+        window.onload = function() {
+            toggleDogSelection(); // Initial state based on selected job
+            document.getElementById('job').addEventListener('change', toggleDogSelection);
+        }
+
+        function showConfirmation() {
+            const jobSelect = document.getElementById('job');
+            const confirmationMessage = {
+                Walking: "You've signed up for dog walking duty!",
+                Feeding: "Your help with feeding our furry friends is much appreciated!",
+                Training: "You've volunteered for training sessions. Thank you!",
+                Socialising: "You're supporting social activities for our dogs. Great choice!",
+                Grooming: "Thank you for volunteering for grooming duties!",
+                Transportation: "You're assisting with transportation tasks. Thank you!",
+                Fostering: "Your fostering support is invaluable! Thank you!"
+            };
+
+            const selectedJob = jobSelect.value;
+            alert(confirmationMessage[selectedJob]);
+            return true;
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Volunteer</h1>
+<p>
+    Thank you for volunteering to help our dogs!<br><br>
+    Please select a job you'd like to assist with and the preferred start and stop times. Optionally, you can choose a<br>
+    specific dog to volunteer with, available exclusively for fostering tasks. Your support means a lot to us!
+</p><br><br>
+
+<div class="container">
+    <div class="volunteer-form">
+        <form action="/volunteer-options" method="POST" onsubmit="return showConfirmation()">
+            <table>
+                <tr>
+                    <td><label for="job">Select Job:</label></td>
+                    <td><select id="job" name="job" required>
+                        <option value="Walking">Walking</option>
+                        <option value="Feeding">Feeding</option>
+                        <option value="Training">Training</option>
+                        <option value="Socialising">Socialising</option>
+                        <option value="Grooming">Grooming</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Fostering">Fostering</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label for="startTime">Start Time:</label></td>
+                    <td><input type="datetime-local" id="startTime" name="startTime" required></td>
+                </tr>
+                <tr>
+                    <td><label for="stopTime">Stop Time:</label></td>
+                    <td><input type="datetime-local" id="stopTime" name="stopTime" required></td>
+                </tr>
+                <tr>
+                    <td><label for="dog">Select Dog:</label></td>
+                    <td><select id="dog" name="dog">
+                        <option value="" disabled selected>Over Here!</option>
+                        <option th:each="dog : ${dogs}" th:if="${dog.adoptionStatus != 'Adopted'}" th:value="${dog.id}" th:text="${dog.name}"></option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2"><input type="submit" value="Volunteer"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2023 Your Dog Adoption Application</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Update Volunteer</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        form {
+            margin-left: 60px;
+        }
+        select, input[type="submit"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select:focus, input[type="submit"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="datetime-local"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        input[type="datetime-local"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Update Volunteer</h1>
+
+<form th:action="${'/'+ type + '_update_volunteer'}" method="POST">
+    <input type="hidden" id="volunteer" name="volunteer" th:value="${volunteer}" />
+    <input type="hidden" id="volunteerId" name="volunteerId" th:value="${volunteer.id}" />
+
+    <label for="email">Email:</label>
+    <select id="email" name="email">
+        <option value="">Select user</option>
+        <option th:each="user : ${users}" th:value="${user.email}" th:text="${user.email}" th:selected="${volunteer.user != null and volunteer.user.email == user.email}"></option>
+    </select>
+
+    <label for="job">Job:</label>
+    <select id="job" name="job">
+        <option value="">Select job</option>
+        <option value="Walking" th:selected="${volunteer.job == 'Walking'}">Walking</option>
+        <option value="Feeding" th:selected="${volunteer.job == 'Feeding'}">Feeding</option>
+        <option value="Training" th:selected="${volunteer.job == 'Training'}">Training</option>
+        <option value="Socialising" th:selected="${volunteer.job == 'Socialising'}">Socialising</option>
+        <option value="Grooming" th:selected="${volunteer.job == 'Grooming'}">Grooming</option>
+        <option value="Transportation" th:selected="${volunteer.job == 'Transportation'}">Transportation</option>
+        <option value="Fostering" th:selected="${volunteer.job == 'Fostering'}">Fostering</option>
+    </select>
+
+    <label for="dog">Dog:</label>
+    <select id="dog" name="dogId">
+        <option value="">Select dog</option>
+        <option th:each="dog : ${dogs}" th:if="${dog.adoptionStatus != 'Adopted'}" th:value="${dog.id}" th:text="${dog.name}" th:selected="${volunteer.dog != null and volunteer.dog.id == dog.id}"></option>
+    </select>
+
+    <tr>
+        <td><label for="startTime">Start Time:</label></td>
+        <td><input type="datetime-local" id="startTime" name="startTime"></td>
+    </tr>
+    <tr>
+        <td><label for="stopTime">Stop Time:</label></td>
+        <td><input type="datetime-local" id="stopTime" name="stopTime"></td>
+    </tr>
+
+    <input type="submit" value="Update Volunteer">
+</form>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

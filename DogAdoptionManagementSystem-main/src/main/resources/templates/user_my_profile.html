@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .profile-info {
+            padding-left: 40px;
+            margin-top: 30px;
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-left: 110px;
+        }
+
+        table p {
+            text-align: left;
+            margin: 0;
+        }
+
+        table input[type="email"],
+        table input[type="text"],
+        table input[type="password"] {
+            width: 95%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        table input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        table input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        td {
+            width: 50%;
+            padding-right: 10px;
+        }
+
+        strong {
+            color: #987554;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .custom-select {
+            width: 103%;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: calc(100% - 5px) center;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+    </style>
+    <script>
+        function sortCities() {
+            var select = document.querySelector('select[name="city"]');
+            var options = Array.from(select.options);
+            options.sort(function(a, b) {
+                return a.text.localeCompare(b.text, 'en', { sensitivity: 'accent' });
+            });
+            select.innerHTML = '';
+            options.forEach(function(option) {
+                select.add(option);
+            });
+        }
+
+        window.onload = function() {
+            sortCities();
+        };
+
+        function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+        }
+
+        function validatePhoneNumber(phoneNumber) {
+        // Allow phone numbers with 8 to 15 digits
+        const phoneRegex = /^\d{8,15}$/;
+        return phoneRegex.test(phoneNumber);
+        }
+
+        function validatePasswordLength(password) {
+        return password.length >= 8 && password.length <= 20;
+        }
+
+        function validateNewPasswordConfirmation() {
+            const newPasswordInput = document.querySelector('input[name="password"]');
+            const confirmNewPasswordInput = document.querySelector('input[name="confirmPassword"]');
+
+            if (newPasswordInput.value.trim() !== confirmNewPasswordInput.value.trim()) {
+                alert('Passwords do not match. Please re-enter matching passwords.');
+                return false;
+            }
+            return true;
+        }
+
+        function showConfirmation() {
+            const phoneNumberInput = document.querySelector('input[name="phoneNumber"]');
+            const phoneNumber = phoneNumberInput.value;
+
+            if (!validatePhoneNumber(phoneNumber)) {
+                alert('Please enter a valid phone number with 8 to 15 digits.');
+                return false; // Prevent form submission
+            }
+
+            const emailInput = document.querySelector('input[name="email"]');
+            const email = emailInput.value;
+
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address.');
+                return false; // Prevent form submission
+            }
+
+            const passwordInput = document.querySelector('input[name="password"]');
+            const password = passwordInput.value;
+
+            // Check if the password field is not empty (indicating the user intends to change the password)
+            if (password.trim() !== '') {
+                if (!validatePasswordLength(password)) {
+                    alert('Password length must be between 8 and 20 characters.');
+                    return false;
+                }
+            }
+
+            if (!validateNewPasswordConfirmation()) {
+                return false;
+            }
+
+            alert("Your information has been successfully updated!");
+            return true;
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>My Profile</h1>
+
+<p>
+    This form provides a seamless way for users to update their account information within the application.<br>
+    You can easily modify details like email, phone number, address and password.
+</p>
+
+<div class="profile-info">
+    <form action="/update-user-profile" method="POST" th:object="${user}" onsubmit="return showConfirmation()">
+        <table>
+            <tr>
+                <td><p>Email:</p></td>
+                <td><input type="email" name="email" th:value="${user.email}"></td>
+            </tr>
+            <tr>
+                <td><p>Phone Number:</p></td>
+                <td><input type="text" name="phoneNumber" th:value="${user.phoneNumber}" title="Please enter a valid phone number with 8 to 15 digits." pattern="[0-9]{8,15}"></td>
+            </tr>
+            <tr>
+                <td><p>City:</p></td>
+                <td><select name="city" class="custom-select">
+                    <option value="" disabled selected>Select City</option>
+                    <option value="Zagreb" th:selected="${user.city == 'Zagreb'}">Zagreb</option>
+                    <option value="Split" th:selected="${user.city == 'Split'}">Split</option>
+                    <option value="Rijeka" th:selected="${user.city == 'Rijeka'}">Rijeka</option>
+                    <option value="Osijek" th:selected="${user.city == 'Osijek'}">Osijek</option>
+                    <option value="Zadar" th:selected="${user.city == 'Zadar'}">Zadar</option>
+                    <option value="Slavonski Brod" th:selected="${user.city == 'Slavonski Brod<'}">Slavonski Brod</option>
+                    <option value="Pula" th:selected="${user.city == 'Pula'}">Pula</option>
+                    <option value="Sesvete" th:selected="${user.city == 'Sesvete'}">Sesvete</option>
+                    <option value="Karlovac" th:selected="${user.city == 'Karlovac'}">Karlovac</option>
+                    <option value="Varaždin" th:selected="${user.city == 'Varaždin'}">Varaždin</option>
+                    <option value="Šibenik" th:selected="${user.city == 'Šibenik'}">Šibenik</option>
+                    <option value="Sisak" th:selected="${user.city == 'Sisak'}">Sisak</option>
+                    <option value="Knin" th:selected="${user.city == 'Knin'}">Knin</option>
+                    <option value="Vinkovci" th:selected="${user.city == 'Vinkovci'}">Vinkovci</option>
+                    <option value="Vukovar" th:selected="${user.city == 'Vukovar'}">Vukovar</option>
+                    <option value="Dubrovnik" th:selected="${user.city == 'Dubrovnik'}">Dubrovnik</option>
+                    <option value="Bjelovar" th:selected="${user.city == 'Bjelovar'}">Bjelovar</option>
+                    <option value="Koprivnica" th:selected="${user.city == 'Koprivnica'}">Koprivnica</option>
+                    <option value="Đakovo" th:selected="${user.city == 'Đakovo'}">Đakovo</option>
+                    <option value="Požega" th:selected="${user.city == 'Požega'}">Požega</option>
+                    <option value="Solin" th:selected="${user.city == 'Solin'}">Solin</option>
+                    <option value="Kaštela" th:selected="${user.city == 'Kaštela'}">Kaštela</option>
+                    <option value="Samobor" th:selected="${user.city == 'Samobor'}">Samobor</option>
+                    <option value="Metković" th:selected="${user.city == 'Metković'}">Metković</option>
+                    <option value="Čakovec" th:selected="${user.city == 'Čakovec'}">Čakovec</option>
+                    <option value="Virovitica" th:selected="${user.city == 'Virovitica'}">Virovitica</option>
+                    <option value="Kutina" th:selected="${user.city == 'Kutina'}">Kutina</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><p>Address:</p></td>
+                <td><input type="text" name="address" maxlength="30" th:value="${user.address}"></td>
+            </tr>
+            <tr>
+                <td><p>New Password:</p></td>
+                <td><input type="password" name="password" minlength="8" maxlength="20" placeholder="Enter new password" th:value="${password}"></td>
+            </tr>
+            <tr>
+                <td><p>Confirm New Password:</p></td>
+                <td><input type="password" name="confirmPassword" minlength="8" maxlength="20" placeholder="Confirm new password"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Update"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<br><p>
+    Below, you'll find additional details related to your account. Please ensure the accuracy<br>
+    of the provided information.
+</p>
+
+<p><strong>Name: </strong><span th:text="${user.name}"></span></p>
+<p><strong>Surname: </strong><span th:text="${user.surname}"></span></p>
+<p><strong>Gender: </strong><span th:text="${user.gender}"></span></p><br><br><br>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

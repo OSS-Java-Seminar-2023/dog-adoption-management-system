@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Adoption Contract</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        .contract-exists-message {
+            color: red;
+            text-align: center;
+        }
+
+        .info-section {
+            display: flex;
+            width: 60%;
+            margin-bottom: 20px;
+            margin-left: 350px;
+        }
+
+        .info-section div {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .vaccine-list li {
+            margin-left: 50px;
+        }
+
+        h3 {
+            margin-left: 350px;
+        }
+
+        ol li {
+            margin-left: 370px;
+        }
+
+        #checkbox-label {
+            display: block;
+            margin-bottom: 10px;
+            margin-left: 250px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        .center {
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+        function showConfirmation() {
+            var oibInput = document.getElementById("oib");
+
+            if (oibInput.value.length !== 11) {
+                alert("OIB must be 11 digits long!");
+                return false;
+            } else {
+                alert("Adoption contract is successfully sent!");
+                return true;
+            }
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Adoption Contract</h1>
+
+<p>
+    The Adoption Contract page represents a binding agreement capturing essential details about both the user seeking
+    to adopt and the dog available for adoption. It features comprehensive<br>
+    information about the user's personal details, including their name, OIB and contact information, alongside vital
+    specifics about the dog, such as its name, breed and gender.
+</p><br>
+
+<form action="/submit-user-contract" method="POST" onsubmit="return showConfirmation()">
+    <p th:if="${previousContractExists}" class="contract-exists-message">You've already submitted a contract for this dog!</p>
+    <div class="info-section">
+        <div>
+            <h2>User Information</h2>
+            <p>OIB: <input type="text" name="oib" placeholder="Enter your OIB (11 digits)" th:value="${user.oib}" pattern="[0-9]{11}" required/></p>
+            <p>Name: <span th:text="${user.name}"></span></p>
+            <p>Surname: <span th:text="${user.surname}"></span></p>
+            <p>Gender: <span th:text="${user.gender}"></span></p>
+            <p>Date of Birth: <span th:text="${#dates.format(user.dateOfBirth, 'dd/MM/yyyy')}"></span></p>
+            <p>Email: <span th:text="${user.email}"></span></p>
+            <p>Phone Number: <span th:text="${user.phoneNumber}"></span></p>
+            <p>City: <span th:text="${user.city}"></span></p>
+            <p>Address: <span th:text="${user.address}"></span></p>
+        </div>
+
+        <div>
+            <h2>Dog Information</h2>
+            <p>Dog Name: <span th:text="${dog.name}"></span></p>
+            <p>Gender: <span th:text="${dog.gender}"></span></p>
+            <p>Date of Birth: <span th:text="${#dates.format(dog.dateOfBirth, 'dd/MM/yyyy')}"></span></p>
+            <p>Breed: <span th:text="${dog.breed}"></span></p>
+            <p>Size: <span th:text="${dog.size}"></span></p>
+            <p>Sterilised: <span th:text="${dog.sterilised}"></span></p>
+            <p>Castrated: <span th:text="${dog.castrated}"></span></p>
+            <p><span th:if="${dogVaccines != null}">
+                        <p>Vaccines:</p>
+                        <ul class="vaccine-list">
+                            <li th:each="vaccine : ${dogVaccines}" th:text="${vaccine.vaccine.vaccineName}"></li>
+                        </ul>
+                    </span>
+                <span th:unless="${dogVaccines != null}">No vaccines recorded</span>
+            </p>
+        </div>
+
+        <div><img th:src="@{'/img/' + ${dog.image}}" alt="Dog Image" class="dog-image"></div>
+    </div>
+
+    <h3>Terms and Conditions</h3>
+    <ol>
+        <li>The adopted dog should be given adequate living conditions, including proper shelter, food, water, and care.</li>
+        <li>The adopter must ensure the dog receives necessary veterinary care, including vaccinations and regular check-ups.</li>
+        <li>The adopter pledges not to subject the dog to any form of abuse, neglect or mistreatment.</li>
+        <li>The adopter agrees to provide a safe environment, adequate exercise and mental stimulation for the dog.</li>
+        <li>Understanding that not all dogs are suitable for every home, the adopter acknowledges that the dog's behavior and needs may vary and agrees to work
+            towards<br>a harmonious relationship.</li>
+        <li>The adopter agrees to provide updates to the shelter/rescue organization regarding the dog's well-being and contact information changes.</li>
+        <li>The adopter assumes all responsibility and liability for any damages or injuries caused by the dog after adoption.</li>
+        <li>The adopter agrees to comply with all local laws and regulations regarding pet ownership, including licensing and leash laws.</li>
+        <li>The adopter pledges not to transfer ownership of the dog to a third party without the explicit consent of the shelter/rescue organization.</li>
+        <li>If needed, the adopter agrees to seek professional training or behavioral help for the dog.</li>
+    </ol><br><br>
+
+    <label for="agreement-checkbox" id="checkbox-label">
+        <input type="checkbox" id="agreement-checkbox" required>By clicking the submit button, I agree to the terms and conditions of the adoption contract and certify that the
+        information provided is accurate to the best of my knowledge. I understand<br>that the status of my application will
+        be communicated to me via email or phone number.</label><br><br><br>
+
+    <div class="center">
+        <input type="submit" value="Submit">
+    </div>
+</form>
+
+<br><br><br><br><br><br><br><br><br><br>
+
+<footer>
+    <p>&copy; 2023 Your Dog Adoption Application</p>
+</footer>
+
+
+</body>
+</html>

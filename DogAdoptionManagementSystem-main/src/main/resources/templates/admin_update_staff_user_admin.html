@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Admin Update</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        form {
+            margin-left: 230px;
+            margin-bottom: 60px;
+        }
+
+        select, input[type="submit"],
+         input[type="date"], input[type="text"],
+         input[type="email"], input[type="password"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        select:focus, input[type="submit"]:focus,
+         input[type="date"]:focus, input[type="text"]:focus,
+         input[type="email"]:focus, input[type="password"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin-top: 60px;
+        }
+    </style>
+    <script>
+        function sortCities() {
+            var select = document.querySelector('select[name="city"]');
+            var options = Array.from(select.options);
+            options.sort(function(a, b) {
+                return a.text.localeCompare(b.text, 'en', { sensitivity: 'accent' });
+            });
+            select.innerHTML = '';
+            options.forEach(function(option) {
+                select.add(option);
+            });
+        }
+
+        window.onload = function() {
+            sortCities();
+        };
+
+        function validateNewPasswordConfirmation() {
+            const newPasswordInput = document.querySelector('input[name="password"]');
+            const confirmNewPasswordInput = document.querySelector('input[name="confirmPassword"]');
+
+            if (newPasswordInput.value.trim() !== confirmNewPasswordInput.value.trim()) {
+                alert('Passwords do not match. Please re-enter matching passwords.');
+                return false;
+            }
+            return true;
+        }
+
+        function showConfirmation() {
+            const email = document.getElementsByName('email')[0].value;
+            const name = document.getElementsByName('name')[0].value;
+            const surname = document.getElementsByName('surname')[0].value;
+            const phoneNumber = document.getElementsByName('phoneNumber')[0].value;
+            const password = document.getElementsByName('password')[0].value;
+            const oib = document.getElementsByName('oib')[0].value;
+            const address = document.getElementsByName('address')[0].value;
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const nameSurnameRegex = /^[A-Za-z]{1,20}$/;
+            const phoneNumberRegex = /^[0-9]{8,16}$/;
+            const oibRegex = /^[0-9]{11}$/;
+
+            if (!oibRegex.test(oib)) {
+                alert("Please enter a valid OIB (11 digits).");
+                return false;
+            }
+
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            if (!nameSurnameRegex.test(name) || !nameSurnameRegex.test(surname)) {
+                alert("Name and surname should contain only letters and be within 20 characters.");
+                return false;
+            }
+
+            if (!phoneNumberRegex.test(phoneNumber)) {
+                alert("Please enter a valid phone number between 8 and 16 digits.");
+                return false;
+            }
+
+            if (address.length > 30) {
+                alert("Address cannot exceed 30 characters.");
+                return false;
+            }
+
+            if (!validateNewPasswordConfirmation()) {
+                return false;
+            }
+
+            alert("Update successful!");
+            return true;
+
+        }
+    </script>
+    <script>
+
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Update</h1>
+
+<p>
+    This form provides a seamless way for admins to update account information within the application.<br>
+    You can easily modify details like email, phone number, address and password.
+</p><br>
+
+    <form th:action="${type=='updateStaff' ? '/admin-update-profile?type=manageStaff' :
+            type=='updateUser' ? '/admin-update-profile?type=manageUser' :
+            '/admin-update-profile?type=manageAdmin'}"
+          method="POST" th:object="${user}" onsubmit="return showConfirmation()">
+
+        <input type="email" name="email" th:value="${user.email}"><br>
+
+        <input type="text" name="name" th:value="${user.name}" pattern="[A-Za-z]{1,20}" title="Only characters allowed, max 20 characters"><br>
+
+        <input type="text" name="surname" th:value="${user.surname}" pattern="[A-Za-z]{1,20}" title="Only characters allowed, max 20 characters"><br>
+
+        <select name="gender" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="Male" th:selected="${user.gender=='Male'}" >Male</option>
+            <option value="Female" th:selected="${user.gender=='Female'}" >Female</option>
+        </select><br>
+
+        <input type="text" name="oib" th:value="${user.Oib}" pattern="[0-9]{11}" title="Enter a valid OIB (11 digits)" th:required="${user.role == 'Staff' or user.role == 'Admin'}"><br>
+
+        <input type="text" name="phoneNumber" th:value="${user.phoneNumber}" pattern="[0-9]{8,16}" title="Enter a valid phone number (8-16 digits)"><br>
+
+        <select name="city">
+            <option value="" disabled selected>Select City</option>
+            <option value="Zagreb" th:selected="${user.city == 'Zagreb'}">Zagreb</option>
+            <option value="Split" th:selected="${user.city == 'Split'}">Split</option>
+            <option value="Rijeka" th:selected="${user.city == 'Rijeka'}">Rijeka</option>
+            <option value="Osijek" th:selected="${user.city == 'Osijek'}">Osijek</option>
+            <option value="Zadar" th:selected="${user.city == 'Zadar'}">Zadar</option>
+            <option value="Slavonski Brod" th:selected="${user.city == 'Slavonski Brod<'}">Slavonski Brod</option>
+            <option value="Pula" th:selected="${user.city == 'Pula'}">Pula</option>
+            <option value="Sesvete" th:selected="${user.city == 'Sesvete'}">Sesvete</option>
+            <option value="Karlovac" th:selected="${user.city == 'Karlovac'}">Karlovac</option>
+            <option value="Varaždin" th:selected="${user.city == 'Varaždin'}">Varaždin</option>
+            <option value="Šibenik" th:selected="${user.city == 'Šibenik'}">Šibenik</option>
+            <option value="Sisak" th:selected="${user.city == 'Sisak'}">Sisak</option>
+            <option value="Knin" th:selected="${user.city == 'Knin'}">Knin</option>
+            <option value="Vinkovci" th:selected="${user.city == 'Vinkovci'}">Vinkovci</option>
+            <option value="Vukovar" th:selected="${user.city == 'Vukovar'}">Vukovar</option>
+            <option value="Dubrovnik" th:selected="${user.city == 'Dubrovnik'}">Dubrovnik</option>
+            <option value="Bjelovar" th:selected="${user.city == 'Bjelovar'}">Bjelovar</option>
+            <option value="Koprivnica" th:selected="${user.city == 'Koprivnica'}">Koprivnica</option>
+            <option value="Đakovo" th:selected="${user.city == 'Đakovo'}">Đakovo</option>
+            <option value="Požega" th:selected="${user.city == 'Požega'}">Požega</option>
+            <option value="Solin" th:selected="${user.city == 'Solin'}">Solin</option>
+            <option value="Kaštela" th:selected="${user.city == 'Kaštela'}">Kaštela</option>
+            <option value="Samobor" th:selected="${user.city == 'Samobor'}">Samobor</option>
+            <option value="Metković" th:selected="${user.city == 'Metković'}">Metković</option>
+            <option value="Čakovec" th:selected="${user.city == 'Čakovec'}">Čakovec</option>
+            <option value="Virovitica" th:selected="${user.city == 'Virovitica'}">Virovitica</option>
+            <option value="Kutina" th:selected="${user.city == 'Kutina'}">Kutina</option>
+        </select><br>
+
+        <input type="text" name="address" maxlength="30" th:value="${user.address}"><br>
+
+        <input type="password" name="password" placeholder="Enter new password" minlength="8" maxlength="20" th:value="${password}"><br><br>
+
+        <input type="password" name="confirmPassword" placeholder="Confirm new password" minlength="8" maxlength="20"><br><br>
+
+        <input type="submit" value="Update">
+
+    </form>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

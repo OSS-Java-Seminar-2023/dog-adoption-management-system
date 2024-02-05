@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        form {
+            margin-left: 60px;
+        }
+
+        select, input[type="submit"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select:focus, input[type="submit"]:focus, input[type="text"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="date"], input[type="text"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin-top: 60px;
+        }
+    </style>
+    <script>
+        function toggleOtherBreedInput() {
+        const breedSelect = document.getElementById('breed');
+        const otherBreedInput = document.getElementById('otherBreedInput');
+
+        if (breedSelect.value === 'Other') {
+            otherBreedInput.style.display = 'block';
+            otherBreedInput.setAttribute('pattern', '[A-Za-z]{1,20}');
+        } else {
+            otherBreedInput.style.display = 'none';
+            otherBreedInput.removeAttribute('pattern');
+        }
+    }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleOtherBreedInput();
+        });
+
+        function showConfirmation() {
+            const name = document.getElementById('name').value;
+            const microchip = document.getElementById('microchip').value;
+
+            const namePattern = /^[A-Za-z]{1,20}$/;
+            if (!namePattern.test(name)) {
+                alert("Name should contain only characters and should be 1-20 characters long.");
+                return false;
+            }
+
+            const microchipPattern = /^\d{15}$/;
+            if (!microchipPattern.test(microchip)) {
+                alert("Microchip should contain 15 digits.");
+                return false;
+            }
+
+            alert("Registration successful!");
+            return true;
+        }
+    </script>
+</head>
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Add dog</h1>
+
+<p>
+    This form allows adding a dog to an adoption platform. It collects details such as the<br>
+    dog's image, name, gender, birthdate, breed, size, sterilization and a 15-digit microchip ID.
+</p><br>
+
+<form th:action="${'submit-add-dog'}" class="login__form" method="POST" th:object="${newDog}" enctype="multipart/form-data">
+
+    <label for="dogImage">Image:</label>
+    <input type="file" id="dogImage" name="dogImage" accept="image/*" required><br><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter the name of the dog" th:value="${newDog.name}" pattern="[A-Za-z]{1,20}" required><br>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male" th:selected="${newDog.gender=='Male'}" >Male</option>
+        <option value="Female" th:selected="${newDog.gender=='Female'}" >Female</option>
+    </select><br>
+
+    <label for="dateOfBirth">Date Of Birth:</label>
+    <input type="date" id="dateOfBirth" name="dateOfBirth" th:value="${newDog.dateOfBirth}" required>
+
+    <label for="size">Size:</label>
+    <select id="size" name="size">
+        <option value="" disabled selected>Select Size</option>
+        <option value="Small" th:selected="${newDog.gender=='Small'}" >Small</option>
+        <option value="Medium" th:selected="${newDog.gender=='Medium'}" >Medium</option>
+        <option value="Large" th:selected="${newDog.gender=='Large'}" >Large</option>
+    </select><br>
+
+    <label for="breed">Breed:</label>
+    <select id="breed" name="breed" th:value="${newDog.breed}">
+        <option value="">Select Breed</option>
+        <option value="Labrador Retriever">Labrador Retriever</option>
+        <option value="German Shepherd">German Shepherd</option>
+        <option value="Golden Retriever">Golden Retriever</option>
+        <option value="Bulldog">Bulldog</option>
+        <option value="Beagle">Beagle</option>
+        <option value="Poodle">Poodle</option>
+        <option value="French Bulldog">French Bulldog</option>
+        <option value="Rottweiler">Rottweiler</option>
+        <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+        <option value="Boxer">Boxer</option>
+        <option value="Dalmatian">Dalmatian</option>
+        <option value="Dachshund">Dachshund</option>
+        <option value="Siberian Husky">Siberian Husky</option>
+        <option value="Doberman">Doberman</option>
+        <option value="Great Dane">Great Dane</option>
+        <option value="Cocker Spaniel">Cocker Spaniel</option>
+        <option value="Shih Tzu">Shih Tzu</option>
+        <option value="Pomeranian">Pomeranian</option>
+        <option value="Miniature Schnauzer">Miniature Schnauzer</option>
+        <option value="Chihuahua">Chihuahua</option>
+        <option value="Border Collie">Border Collie</option>
+        <option value="Other">Other</option>
+    </select>
+
+
+
+    <label for="sterilised">Sterilised:</label>
+    <select id="sterilised" name="sterilised">
+        <option value="" disabled selected>Select Sterilised</option>
+        <option value="Yes" th:selected="${newDog.sterilised=='Yes'}" >Yes</option>
+        <option value="No" th:selected="${newDog.sterilised=='No'}" >No</option>
+    </select>
+
+    <label for="castrated">Castrated:</label>
+    <select id="castrated" name="castrated">
+        <option value="" disabled selected>Select Castrated</option>
+        <option value="Yes" th:selected="${newDog.castrated=='Yes'}" >Yes</option>
+        <option value="No" th:selected="${newDog.castrated=='No'}" >No</option>
+    </select><br>
+
+    <label for="microchip">Microchip:</label>
+    <input type="text" id="microchip" name="microchip" placeholder="Must be 15 digits" th:value="${newDog.microchip}" pattern="[0-9]{15}" title="Must be 15 digits" required><br><br><br>
+
+    <input type="submit" value="Register">
+</form>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

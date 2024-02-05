@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Update Dog Vaccine</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        form {
+            margin-left: 60px;
+        }
+
+        h2 {
+            margin-left: 180px;
+        }
+
+        .vaccine-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: 130px;
+        }
+
+        .vaccine-container span {
+            margin-left: 60px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+
+        .vaccine {
+            margin-right: 40px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 200px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Update Vaccines for <span th:text="${dog.name}"></span></h1>
+
+<p>
+    Please select the vaccines below that you wish to update for this dog.
+</p>
+
+<form th:action="${'/submit-dogVaccine-update'}" method="POST" onsubmit="return showConfirmation()">
+    <input type="hidden" name="dogId" th:value="${dog.id}" />
+
+    <h2>Vaccines</h2>
+
+    <div th:each="vaccine : ${vaccines}" class="vaccine-container">
+        <span th:text="${vaccine.vaccineName}"></span>
+        <input type="checkbox"
+               class="form-check-input"
+               th:name="${'vaccines'}"
+               th:value="${vaccine.vaccineName}"
+               th:checked="${#lists.contains(dog_vaccines.![vaccine.vaccineName], vaccine.vaccineName)}"
+               th:disabled="${#lists.contains(dog_vaccines.![vaccine.vaccineName], vaccine.vaccineName)}" />
+    </div>
+
+    <br>
+    <input type="submit" value="Update">
+</form>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

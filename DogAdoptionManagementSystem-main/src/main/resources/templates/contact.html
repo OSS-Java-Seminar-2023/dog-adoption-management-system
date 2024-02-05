@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Contact</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .contact-info strong {
+            color: #987554;
+        }
+
+        .map-container {
+            margin-left: 60px;
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Contact Us</h1>
+
+<p>Have questions about our adoption process, want to learn more about our services or need assistance?<br>
+    Feel free to reach out to us!</p><br>
+
+<div class="contact-info">
+    <p><strong>Phone:</strong> +1234567890</p>
+    <p><strong>Email:</strong> info@dogadoptionapp.com</p>
+    <p><strong>Address:</strong> Šetalište Ivana Meštrovića 86, 21000, Split</p>
+
+    <div class="map-container">
+        <iframe
+                width="40%"
+                height="250px"
+                style="border:0"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2893.883957145408!2d16.409180897450277!3d43.504756289267064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13356766ac70e3eb%3A0x7e4d8b7999a461a4!2zxaBldGFsacWhdGUgSXZhbmEgTWXFoXRyb3ZpxIdhIDg2LCAyMTAwMCwgU3BsaXQ!5e0!3m2!1sen!2shr!4v1704204663239!5m2!1sen!2shr"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+</div><br>
+
+<p>We value your feedback and suggestions. Please do not hesitate to get in touch with us!</p>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

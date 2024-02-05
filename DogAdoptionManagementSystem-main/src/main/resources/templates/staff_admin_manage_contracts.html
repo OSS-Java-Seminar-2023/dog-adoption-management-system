@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Contract Management</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        .contract-table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            margin-left: 60px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .contract-table td  {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .contract-table th {
+            padding: 8px;
+        }
+
+        .contract-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #987554;
+            color: white;
+        }
+
+        .contract-table tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .contract-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .contract-table tr:hover {
+            background-color: #ddd;
+        }
+
+        form {
+            margin-left: 60px;
+        }
+
+        select, input[type="submit"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select:focus, input[type="submit"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="date"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        input[type="date"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        .status-approved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-declined {
+            color: red;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin-top: 60px;
+        }
+    </style>
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Contract Management</h1>
+
+<form th:action="${'/' + #strings.toLowerCase(type) + '_manage_contracts'}" method="GET">
+    <label for="dog">Filter by Dog:</label>
+    <select id="dog" name="dogId">
+        <option value="">Select dog</option>
+        <option th:each="dog : ${dogs}" th:value="${dog.id}" th:text="${dog.name}"></option>
+    </select>
+
+    <label for="status">Filter by Status:</label>
+    <select id="status" name="status">
+        <option value="">Select status</option>
+        <option value="Submitted">Submitted</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Approved">Approved</option>
+        <option value="Declined">Declined</option>
+    </select>
+
+    <input type="submit" value="Filter">
+</form><br>
+
+<form th:action="${'/' + type + '_add_contract'}" method="GET">
+    <input type="submit" value="Add">
+</form><br>
+
+<table class="contract-table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Name</th>
+            <th>Dog</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+    <th:block th:if="${#lists.isEmpty(filteredContracts)}">
+        <tr>
+            <td colspan="8">No contracts found based on the applied filters.</td>
+        </tr>
+    </th:block>
+    <form th:action="${'/' + type + '_update_contract'}" method="POST" th:each="contract : ${filteredContracts}">
+        <tr>
+            <td><span th:text="${contract.user.email}"></span></td>
+            <td><span th:text="${contract.user.phoneNumber}"></span></td>
+            <td><span th:text="${contract.user.name} + ' ' + ${contract.user.surname}"></span></td>
+            <td><span th:text="${contract.dog.name}"></span></td>
+            <td><span th:text="${contract.dateOfContract}"></span></td>
+            <td>
+                <th:block th:if="${contract.status == 'Submitted' or contract.status == 'In Progress'}">
+                    <select name="status" required th:value="${contract.status}">
+                        <option value="Submitted" th:selected="${contract.status=='Submitted'}">Submitted</option>
+                        <option value="In Progress" th:selected="${contract.status=='In Progress'}">In Progress</option>
+                        <option value="Approved" th:selected="${contract.status=='Approved'}">Approved</option>
+                        <option value="Declined" th:selected="${contract.status=='Declined'}">Declined</option>
+                    </select>
+                </th:block>
+                <th:block th:if="${contract.status == 'Approved'}">
+                    <span th:text="${contract.status}" class="status-approved"></span>
+                </th:block>
+                <th:block th:if="${contract.status == 'Declined'}">
+                    <span th:text="${contract.status}" class="status-declined"></span>
+                </th:block>
+            </td>
+            <td>
+                <input type="hidden" name="contractId" th:value="${contract.id}" />
+                <input type="submit" value="Update" th:if="${contract.status == 'Submitted' or contract.status == 'In Progress'}" />
+            </td>
+        </tr>
+    </form>
+    </tbody>
+</table>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

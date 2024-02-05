@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        .options strong {
+            color: #987554;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Hello <span th:text="${user.name}"></span>!</h1>
+
+<p>Welcome to your personalised user dashboard! Explore the options below to make the most of your experience.</p><br>
+
+<div class="options">
+    <p><strong>My Profile:</strong> View and manage your profile details.</p>
+    <p><strong>Dogs for Adoption:</strong> Explore and interact with our adorable dogs available for adoption.</p>
+    <p><strong>Contract Progress Tracking:</strong> Track the status and progress of your adoption contracts.</p>
+    <p><strong>Volunteer:</strong> Find opportunities to volunteer and help our furry friends.</p>
+    <p><strong>Contact Us:</strong> Reach out for help or info via phone, email or in person!</p>
+    <p><strong>Logout:</strong> Click here to log out of your account.</p>
+</div><br><br>
+
+<p>
+    Thank you for choosing to be a part of this initiative. Your involvement and support drive us forward.<br>
+    Feel free to explore and enjoy your time with our dog adoption community!
+</p>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

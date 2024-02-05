@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <style>
+        .login__form input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+        }
+
+        .register-form input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        .register-select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: calc(100% - 5px) center;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+</style>
+<script>
+        function calculateAge(dob) {
+            const today = new Date();
+            const birthDate = new Date(dob);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function validateForm() {
+            const form = document.querySelector('.login__form');
+            const dobInput = form.elements['dateOfBirth'];
+            const emailInput = form.elements['email'];
+            const phoneNumberInput = form.elements['phoneNumber'];
+
+            dobInput.addEventListener('change', function () {
+                const age = calculateAge(this.value);
+                if (age < 18) {
+                    alert('You must be at least 18 years old to register.');
+                    this.value = ''; // Clear the date input
+                }
+            });
+
+            form.addEventListener('submit', function (event) {
+                if (!validateEmail(emailInput.value)) {
+                    alert('Please enter a valid email address.');
+                    event.preventDefault(); // Prevent form submission
+                }
+
+                if (!validatePhoneNumber(phoneNumberInput.value)) {
+                    alert('Please enter a valid phone number (8 to 15 digits).');
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+        }
+
+
+        function validatePassword() {
+            var password = document.querySelector('input[name="password"]');
+            var confirmPassword = document.querySelector('input[name="confirmPassword"]');
+            var submitButton = document.querySelector('input[type="submit"]');
+
+            function validate() {
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.setCustomValidity("Passwords don't match");
+                } else {
+                    confirmPassword.setCustomValidity('');
+                }
+            }
+
+            password.addEventListener('change', validate);
+            confirmPassword.addEventListener('keyup', validate);
+            confirmPassword.addEventListener('change', validate);
+
+            submitButton.addEventListener('click', function(event) {
+                if (password.value !== confirmPassword.value) {
+                    event.preventDefault();
+                }
+            });
+        }
+
+        function sortCities() {
+            var select = document.querySelector('select[name="city"]');
+            var options = Array.from(select.options);
+            options.sort(function(a, b) {
+                return a.text.localeCompare(b.text, 'en', { sensitivity: 'accent' });
+            });
+            select.innerHTML = '';
+            options.forEach(function(option) {
+                select.add(option);
+            });
+        }
+
+        function initialize() {
+            sortCities();
+            validateForm();
+            validatePassword();
+        }
+
+        window.onload = function() {
+            initialize();
+        };
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePhoneNumber(phoneNumber) {
+            const phoneRegex = /^\d{8,15}$/;
+            return phoneRegex.test(phoneNumber);
+        }
+
+        function showConfirmation() {
+            const phoneNumberInput = document.querySelector('input[name="phoneNumber"]');
+            const phoneNumber = phoneNumberInput.value;
+
+            if (!validatePhoneNumber(phoneNumber)) {
+                alert('Please enter a valid phone number with 8 to 15 digits.');
+                return false; // Prevent form submission
+            }
+
+            const password = document.querySelector('input[name="password"]').value;
+            const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please re-enter matching passwords.');
+                return false; // Prevent form submission
+            }
+
+            if (password.length < 8 || password.length > 20) {
+                alert('Password must be between 8 and 20 characters.');
+                return false; // Prevent form submission
+            }
+
+            const age = document.querySelector('input[name="age"]').value;
+            if (age < 18) {
+                alert('You must be at least 18 years old to register.');
+                return false; // Prevent form submission
+            }
+
+            alert("Your account has been successfully registered!");
+            return true; // Allow form submission
+        }
+</script>
+</head>
+<body>
+<div class="register-container">
+    <h1>Registration Form</h1>
+
+    <form action="/register" class="login__form" method="POST" th:object="${registerRequest}" onsubmit="return showConfirmation()">
+
+        <input type="text" name="name" placeholder="First Name" th:value="${registerRequest.name}" required>
+
+        <input type="text" name="surname" placeholder="Last Name"  th:value="${registerRequest.surname}" required>
+
+        <select name="gender" class="register-select" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="Male" th:selected="${registerRequest.gender=='Male'}" >Male</option>
+            <option value="Female" th:selected="${registerRequest.gender=='Female'}" >Female</option>
+        </select>
+
+        <input type="email" name="email" placeholder="Email" th:value="${registerRequest.email}" required>
+
+        <input type="text" name="phoneNumber" placeholder="Phone Number" th:value="${registerRequest.phoneNumber}" required>
+
+        <input type="date" name="dateOfBirth" placeholder="Date of Birth" th:value="${registerRequest.dateOfBirth}" required>
+
+        <select name="city" class="register-select" required>
+            <option value="" disabled selected>Select City</option>
+            <option value="Zagreb" th:selected="${registerRequest.city == 'Zagreb'}">Zagreb</option>
+            <option value="Split" th:selected="${registerRequest.city == 'Split'}">Split</option>
+            <option value="Rijeka" th:selected="${registerRequest.city == 'Rijeka'}">Rijeka</option>
+            <option value="Osijek" th:selected="${registerRequest.city == 'Osijek'}">Osijek</option>
+            <option value="Zadar" th:selected="${registerRequest.city == 'Zadar'}">Zadar</option>
+            <option value="Slavonski Brod" th:selected="${registerRequest.city == 'Slavonski Brod<'}">Slavonski Brod</option>
+            <option value="Pula" th:selected="${registerRequest.city == 'Pula'}">Pula</option>
+            <option value="Sesvete" th:selected="${registerRequest.city == 'Sesvete'}">Sesvete</option>
+            <option value="Karlovac" th:selected="${registerRequest.city == 'Karlovac'}">Karlovac</option>
+            <option value="Varaždin" th:selected="${registerRequest.city == 'Varaždin'}">Varaždin</option>
+            <option value="Šibenik" th:selected="${registerRequest.city == 'Šibenik'}">Šibenik</option>
+            <option value="Sisak" th:selected="${registerRequest.city == 'Sisak'}">Sisak</option>
+            <option value="Knin" th:selected="${registerRequest.city == 'Knin'}">Knin</option>
+            <option value="Vinkovci" th:selected="${registerRequest.city == 'Vinkovci'}">Vinkovci</option>
+            <option value="Vukovar" th:selected="${registerRequest.city == 'Vukovar'}">Vukovar</option>
+            <option value="Dubrovnik" th:selected="${registerRequest.city == 'Dubrovnik'}">Dubrovnik</option>
+            <option value="Bjelovar" th:selected="${registerRequest.city == 'Bjelovar'}">Bjelovar</option>
+            <option value="Koprivnica" th:selected="${registerRequest.city == 'Koprivnica'}">Koprivnica</option>
+            <option value="Đakovo" th:selected="${registerRequest.city == 'Đakovo'}">Đakovo</option>
+            <option value="Požega" th:selected="${registerRequest.city == 'Požega'}">Požega</option>
+            <option value="Solin" th:selected="${registerRequest.city == 'Solin'}">Solin</option>
+            <option value="Kaštela" th:selected="${registerRequest.city == 'Kaštela'}">Kaštela</option>
+            <option value="Samobor" th:selected="${registerRequest.city == 'Samobor'}">Samobor</option>
+            <option value="Metković" th:selected="${registerRequest.city == 'Metković'}">Metković</option>
+            <option value="Čakovec" th:selected="${registerRequest.city == 'Čakovec'}">Čakovec</option>
+            <option value="Virovitica" th:selected="${registerRequest.city == 'Virovitica'}">Virovitica</option>
+            <option value="Kutina" th:selected="${registerRequest.city == 'Kutina'}">Kutina</option>
+        </select>
+
+        <input type="text" name="address" placeholder="Address" th:value="${registerRequest.address}" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+
+        <input type="submit" value="Register">
+    </form>
+</div>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

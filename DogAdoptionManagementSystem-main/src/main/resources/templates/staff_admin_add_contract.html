@@ -1,0 +1,176 @@
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>Add Contract</title>
+        <link rel="stylesheet" th:href="@{/css/user_page.css}">
+        <style>
+            .contract-table {
+                font-family: Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
+                width: 80%;
+                margin-left: 60px;
+                text-align: center;
+            }
+
+            .contract-table td  {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            .contract-table th {
+                padding: 8px;
+            }
+
+            .contract-table th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                background-color: #987554;
+                color: white;
+            }
+
+            .contract-table tr:nth-child(odd) {
+                background-color: white;
+            }
+
+            .contract-table tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .contract-table tr:hover {
+                background-color: #ddd;
+            }
+
+            form {
+                margin-left: 60px;
+            }
+
+            select, input[type="submit"] {
+                padding: 6px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+
+            select:focus, input[type="submit"]:focus {
+                border-color: #987554;
+                outline: none;
+            }
+
+            input[type="date"] {
+                padding: 6px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-bottom: 10px;
+                font-size: 14px;
+                width: 167px;
+            }
+
+            input[type="date"]:focus {
+                border-color: #987554;
+                outline: none;
+            }
+
+            input[type="submit"] {
+                padding: 8px 12px;
+                border: none;
+                border-radius: 4px;
+                background-color: #987554;
+                color: white;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                margin-left: 40px;
+            }
+
+            input[type="submit"]:hover {
+                background-color: #967d65;
+            }
+
+            footer {
+                background-color: #18191A;
+                color: grey;
+                text-align: center;
+                padding: 30px 0;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+        </style>
+        <script>
+            function validateOIB(oib) {
+            var oibRegex = /^[0-9]{11}$/;
+            return oibRegex.test(oib);
+            }
+
+            function onSubmit() {
+                var oibInput = document.getElementById('oib');
+                var oibValue = oibInput.value;
+
+                if (validateOIB(oibValue)) {
+                    alert('Adding contract is a success!');
+                    return true;
+                } else {
+                    alert('Please enter a valid OIB (11 digits).');
+                    return false;
+                }
+            }
+        </script>
+    </head>
+    <body>
+    <header>
+        <nav>
+            <ul th:if="${type == 'Staff'}">
+                <li><a th:href="@{/staff_page}">Home</a></li>
+                <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+                <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+                <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+                <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+                <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+
+            <ul th:if="${type == 'Admin'}">
+                <li><a th:href="@{/admin_page}">Home</a></li>
+                <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+                <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+                <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+                <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+                <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+                <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+                <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1>Add Contract</h1>
+    <form th:action="${'/submit-add-contract'}" method="POST" onsubmit="return onSubmit();">
+
+        <label for="user">Select User:</label>
+        <select id="user" name="userId" required>
+            <option value="" disabled selected>Select a User</option>
+            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+        </select><br>
+
+        <label for="oib">Enter OIB:</label>
+        <input type="text" id="oib" name="oib" th:value="${user?.oib}" pattern="[0-9]{11}" placeholder="Must be 11 digits" required><br><br>
+
+        <label for="dog">Select Dog:</label>
+        <select id="dog" name="dogId">
+            <option th:each="dog : ${dogs}" th:value="${dog.id}" th:text="${dog.name}"></option>
+        </select><br><br><br>
+
+        <div class="center">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+
+    <footer>
+        <p>&copy; 2023 Your Dog Adoption Application</p>
+    </footer>
+
+    </body>
+    </html>

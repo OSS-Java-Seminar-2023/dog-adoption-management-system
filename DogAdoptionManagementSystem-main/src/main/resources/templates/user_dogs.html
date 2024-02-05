@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Dogs for Adoption</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        form {
+              margin-left: 60px;
+        }
+
+        select, input[type="checkbox"] {
+              padding: 6px 10px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              margin-bottom: 10px;
+              font-size: 14px;
+        }
+
+        select:focus, input[type="checkbox"]:focus {
+               border-color: #987554;
+               outline: none;
+        }
+
+        input[type="submit"] {
+               padding: 8px 12px;
+               border: none;
+               border-radius: 4px;
+               background-color: #987554;
+               color: white;
+               cursor: pointer;
+               text-decoration: none;
+               display: inline-block;
+               margin-left: 40px;
+        }
+
+        input[type="submit"]:hover {
+               background-color: #967d65;
+        }
+
+        .dog-card a {
+               padding: 8px 12px;
+               border: none;
+               border-radius: 4px;
+               background-color: #987554;
+               color: white;
+               cursor: pointer;
+               text-decoration: none;
+        }
+
+        .dog-card a:hover {
+               background-color: #967d65;
+        }
+
+        footer {
+         background-color: #18191A;
+         color: grey;
+         text-align: center;
+         padding: 30px 0;
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Available Dogs for Adoption</h1>
+
+<form th:action="@{/user_dogs}" method="GET">
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+        <option value="">All</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <label for="size">Size:</label>
+    <select id="size" name="size">
+        <option value="">All</option>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+    </select>
+
+    <label for="breed">Breed:</label>
+    <select id="breed" name="breed">
+        <option value="">All</option>
+        <option value="Labrador Retriever">Labrador Retriever</option>
+        <option value="German Shepherd">German Shepherd</option>
+        <option value="Golden Retriever">Golden Retriever</option>
+        <option value="Bulldog">Bulldog</option>
+        <option value="Beagle">Beagle</option>
+        <option value="Poodle">Poodle</option>
+        <option value="French Bulldog">French Bulldog</option>
+        <option value="Rottweiler">Rottweiler</option>
+        <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+        <option value="Boxer">Boxer</option>
+        <option value="Dalmatian">Dalmatian</option>
+        <option value="Dachshund">Dachshund</option>
+        <option value="Siberian Husky">Siberian Husky</option>
+        <option value="Doberman">Doberman</option>
+        <option value="Great Dane">Great Dane</option>
+        <option value="Cocker Spaniel">Cocker Spaniel</option>
+        <option value="Shih Tzu">Shih Tzu</option>
+        <option value="Pomeranian">Pomeranian</option>
+        <option value="Miniature Schnauzer">Miniature Schnauzer</option>
+        <option value="Chihuahua">Chihuahua</option>
+        <option value="Border Collie">Border Collie</option>
+    </select>
+
+    <label for="ageCategory">Age Category:</label>
+    <select id="ageCategory" name="ageCategory">
+        <option value="">All</option>
+        <option value="puppy">Puppy (under 1 year old)</option>
+        <option value="adult">Adult (1-8 years old)</option>
+        <option value="senior">Senior (over 8 years old)</option>
+    </select>
+
+    <label for="castrated">Castrated:</label>
+    <input type="checkbox" id="castrated" name="castrated" value="true">
+
+    <label for="sterilised">Sterilised:</label>
+    <input type="checkbox" id="sterilised" name="sterilised" value="true">
+
+    <input type="submit" value="Filter">
+</form>
+
+<div class="dog-list">
+    <p th:if="${#lists.isEmpty(dogs)}">No dogs found matching the specified criteria.</p>
+    <div th:each="dog : ${dogs}">
+        <div class="dog-card">
+            <h2 th:text="${dog.name}"></h2>
+            <img th:src="@{'/img/' + ${dog.image}}" alt="Dog Image" style="max-width: 100%">
+            <p th:text="'Gender: ' + ${dog.gender}"></p>
+            <p th:text="'Date of Birth: ' + ${#dates.format(dog.dateOfBirth, 'dd/MM/yyyy')}"></p>
+            <p th:text="'Adoption Status: ' + ${dog.adoptionStatus}"></p>
+            <p><a th:href="@{/user_dog_info(dog_id=${dog.id})}">More Information</a></p>
+        </div>
+    </div>
+</div><br><br><br><br><br><br><br><br>
+
+<footer>
+    <p>&copy; 2023 Your Dog Adoption Application</p>
+</footer>
+
+</body>
+</html>

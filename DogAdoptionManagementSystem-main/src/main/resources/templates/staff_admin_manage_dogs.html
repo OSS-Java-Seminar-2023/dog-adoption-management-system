@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Dog Management</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        .dog-table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            margin-left: 60px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .dog-table td  {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .dog-table th {
+            padding: 8px;
+        }
+
+        .dog-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #987554;
+            color: white;
+        }
+
+        .dog-table tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .dog-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .dog-table tr:hover {
+            background-color: #ddd;
+        }
+
+        form {
+            margin-left: 60px;
+        }
+
+        select, input[type="submit"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        select:focus, input[type="submit"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="date"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        input[type="date"]:focus {
+            border-color: #987554;
+            outline: none;
+        }
+
+        input[type="submit"], .dog-table a {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        input[type="submit"]:hover, .dog-table a:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin-top: 60px;
+        }
+    </style>
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Dog Management</h1>
+
+<form th:action="${'/' + type + '_manage_dogs'}  " method="GET">
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+        <option value="">All</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <label for="size">Size:</label>
+    <select id="size" name="size">
+        <option value="">All</option>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+    </select>
+
+    <label for="breed">Breed:</label>
+    <select id="breed" name="breed">
+        <option value="">All</option>
+        <option value="Labrador Retriever">Labrador Retriever</option>
+        <option value="German Shepherd">German Shepherd</option>
+        <option value="Golden Retriever">Golden Retriever</option>
+        <option value="Bulldog">Bulldog</option>
+        <option value="Beagle">Beagle</option>
+        <option value="Poodle">Poodle</option>
+        <option value="French Bulldog">French Bulldog</option>
+        <option value="Rottweiler">Rottweiler</option>
+        <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+        <option value="Boxer">Boxer</option>
+        <option value="Dalmatian">Dalmatian</option>
+        <option value="Dachshund">Dachshund</option>
+        <option value="Siberian Husky">Siberian Husky</option>
+        <option value="Doberman">Doberman</option>
+        <option value="Great Dane">Great Dane</option>
+        <option value="Cocker Spaniel">Cocker Spaniel</option>
+        <option value="Shih Tzu">Shih Tzu</option>
+        <option value="Pomeranian">Pomeranian</option>
+        <option value="Miniature Schnauzer">Miniature Schnauzer</option>
+        <option value="Chihuahua">Chihuahua</option>
+        <option value="Border Collie">Border Collie</option>
+    </select>
+
+    <label for="ageCategory">Age Category:</label>
+    <select id="ageCategory" name="ageCategory">
+        <option value="">All</option>
+        <option value="puppy">Puppy (under 1 year old)</option>
+        <option value="adult">Adult (1-8 years old)</option>
+        <option value="senior">Senior (over 8 years old)</option>
+    </select>
+
+    <label for="castrated">Castrated:</label>
+    <input type="checkbox" id="castrated" name="castrated" value="true">
+
+    <label for="sterilised">Sterilised:</label>
+    <input type="checkbox" id="sterilised" name="sterilised" value="true">
+
+    <input type="submit" value="Filter">
+</form><br>
+
+<form th:action="${'/add_dog'}" method="GET">
+    <input type="submit" value="Add">
+</form><br>
+
+<table class="dog-table">
+    <thead>
+    <tr>
+        <th>Microchip Number</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Date of Birth</th>
+        <th>Breed</th>
+        <th>Size</th>
+        <th>Sterilised</th>
+        <th>Castrated</th>
+        <th>Note</th>
+        <th>Adoption Status</th>
+        <th>Vaccines</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:if="${#lists.isEmpty(dogs)}">
+        <tr>
+            <td colspan="6">No dogs found based on the applied filters.</td>
+        </tr>
+    </th:block>
+    <tr th:each="dog : ${dogs}">
+        <td th:text="${dog.microchip}"></td>
+        <td th:text="${dog.name}"></td>
+        <td th:text="${dog.gender}"></td>
+        <td th:text="${#dates.format(dog.dateOfBirth, 'dd/MM/yyyy')}"></td>
+        <td th:text="${dog.breed}"></td>
+        <td th:text="${dog.size}"></td>
+        <td th:text="${dog.sterilised}"></td>
+        <td th:text="${dog.castrated}"></td>
+        <td th:text="${dog.note}"></td>
+        <td th:text="${dog.adoptionStatus}"></td>
+        <td>
+            <th:block>
+                <p><a th:href="@{/update_dog_vaccine(dog_id=${dog.id})}">View</a></p>
+            </th:block>
+        </td>
+        <td>
+            <th:block>
+                <p><a th:href="@{/update_dog(dog_id=${dog.id})}">Update</a></p>
+            </th:block>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>

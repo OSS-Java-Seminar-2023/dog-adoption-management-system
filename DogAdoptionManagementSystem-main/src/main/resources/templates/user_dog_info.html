@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Dog Information</title>
+    <link rel="stylesheet" th:href="@{/css/user_dog.css}">
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: -70px;
+        }
+
+        .dog-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns */
+            gap: 20px;
+            padding: 20px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .dog-image {
+            max-width: 100%;
+        }
+
+        .dog-name {
+            text-align: left;
+        }
+
+        .dog-details ul {
+            padding-left: 100px;
+        }
+
+        .action-buttons a {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 10px;
+            justify-content: center;
+        }
+
+        .action-buttons a:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+         background-color: #18191A;
+         color: grey;
+         text-align: center;
+         padding: 30px 0;
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/user_page}">Home</a></li>
+            <li><a th:href="@{/user_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/user_dogs}">Dogs for Adoption</a></li>
+            <li><a th:href="@{/user_contract_progress_tracking}">Contract Progress Tracking</a></li>
+            <li><a th:href="@{/user_volunteer}">Volunteer</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Detailed Information</h1>
+
+<main>
+    <h2 th:text="${selectedDog.name}" class="dog-name"></h2>
+    <div class="dog-info">
+        <div class="dog-image-container">
+            <img th:src="@{'/img/' + ${selectedDog.image}}" alt="Dog Image" class="dog-image">
+        </div>
+        <div class="dog-details">
+            <p th:text="'Microchip Number: ' + ${selectedDog.microchip}"></p>
+            <p th:text="'Gender: ' + ${selectedDog.gender}"></p>
+            <p th:text="'Date of Birth: ' + ${#dates.format(selectedDog.dateOfBirth, 'dd/MM/yyyy')}"></p>
+            <p th:text="'Breed: ' + ${selectedDog.breed}"></p>
+            <p th:text="'Size: ' + ${selectedDog.size}"></p>
+            <p th:text="'Sterilised: ' + ${selectedDog.sterilised}"></p>
+            <p th:text="'Castrated: ' + ${selectedDog.castrated}"></p>
+            <p th:text="'Note: ' + ${selectedDog.note}"></p>
+            <p th:text="'Adoption Status: ' + ${selectedDog.adoptionStatus}"></p>
+            <p><span th:if="${dogVaccines != null}">
+                <p>Vaccines:</p>
+                <ul>
+                    <li th:each="vaccine : ${dogVaccines}" th:text="${vaccine.vaccine.vaccineName}"></li>
+                </ul>
+            </span>
+            <span th:unless="${dogVaccines != null}">No vaccines recorded</span>
+            </p>
+        </div>
+    </div><br>
+    <div class="action-buttons">
+        <a th:href="@{'/user_contract?dog_id=' + ${selectedDog.id} + '&user_id=' + ${userId}}">Adopt!</a>
+        <a th:href="@{'/user_waiting_list?dog_id=' + ${selectedDog.id} + '&user_id=' + ${userId}}">See Waiting List</a>
+    </div>
+
+</main><br><br><br><br><br><br><br>
+
+<footer>
+    <p>&copy; 2023 Your Dog Adoption Application</p>
+</footer>
+
+</body>
+</html>

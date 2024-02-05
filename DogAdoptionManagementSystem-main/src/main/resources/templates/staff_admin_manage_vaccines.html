@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Dog Management</title>
+    <link rel="stylesheet" th:href="@{/css/user_page.css}">
+    <style>
+        form {
+            margin-left: 60px;
+        }
+
+        .vaccine-table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 30%;
+            margin-left: 60px;
+            text-align: center;
+        }
+
+        .vaccine-table td  {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .vaccine-table th {
+            padding: 8px;
+        }
+
+        .vaccine-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #987554;
+            color: white;
+        }
+
+        .vaccine-table tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .vaccine-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .vaccine-table tr:hover {
+            background-color: #ddd;
+        }
+
+        input[type="text"] {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            width: 167px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #987554;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #967d65;
+        }
+
+        footer {
+            background-color: #18191A;
+            color: grey;
+            text-align: center;
+            padding: 30px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+        function validateVaccine() {
+            var vaccineNameInput = document.getElementById('newVaccineName');
+
+            var vaccineRegex = /^[A-Za-z ]{1,25}$/;
+
+            var isValidVaccine = vaccineRegex.test(vaccineNameInput.value);
+
+            if (!isValidVaccine) {
+                alert('Please enter a valid vaccine name. It should contain only characters and be less than 25 characters.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+<body>
+<header>
+    <nav>
+        <ul th:if="${type == 'Staff'}">
+            <li><a th:href="@{/staff_page}">Home</a></li>
+            <li><a th:href="@{/staff_my_profile}">My Profile</a></li>
+            <li><a th:href="@{/staff_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/staff_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/staff_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/staff_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+
+        <ul th:if="${type == 'Admin'}">
+            <li><a th:href="@{/admin_page}">Home</a></li>
+            <li><a th:href="@{/admin_manage_admin_subject?type=manageAdmin}">Admin Management</a></li>
+            <li><a th:href="@{/admin_manage_staff_subject?type=manageStaff}">Staff Management</a></li>
+            <li><a th:href="@{/admin_manage_user_subject?type=manageUser}">User Management</a></li>
+            <li><a th:href="@{/admin_manage_volunteers}">Volunteer Management</a></li>
+            <li><a th:href="@{/admin_manage_dogs}">Dog Management</a></li>
+            <li><a th:href="@{/admin_manage_contracts}">Contract Management</a></li>
+            <li><a th:href="@{/admin_manage_vaccines}">Vaccine Management</a></li>
+            <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Vaccines Management</h1>
+
+<form th:action="${'/add_vaccine'}" method="POST" onsubmit="return validateVaccine()">
+    <label for="newVaccineName">New Vaccine Name:</label>
+    <input type="text" id="newVaccineName" name="newVaccineName" pattern="^[A-Za-z ]{1,25}$" title="Must be less than 25 characters" required>
+    <input type="submit" value="Add">
+</form><br>
+
+<table class="vaccine-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="vaccine : ${vaccines}">
+            <td th:text="${vaccine.vaccineName}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<footer>
+    <b>&copy; 2023 Your Dog Adoption Application</b>
+</footer>
+
+</body>
+</html>
